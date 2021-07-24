@@ -7,10 +7,12 @@ import {
   updateExpense,
 } from './app/read-data.service';
 import { ItemNotFoundError } from './app/item-not-found.error';
+import cors from 'cors';
 
 export const app = express();
 
 app.use(express.json());
+app.use(cors());
 
 app.get('/api/expenses', (req, res) => {
   res.send(getExpenses());
