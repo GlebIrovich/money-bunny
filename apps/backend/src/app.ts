@@ -33,7 +33,7 @@ app.delete('/api/expenses/:id', (req, res) => {
   const id = req.params.id as string;
   try {
     deleteExpense(id);
-    res.sendStatus(200);
+    res.send({ id });
   } catch (error) {
     if (error instanceof ItemNotFoundError) {
       res.sendStatus(404);
