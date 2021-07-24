@@ -5,6 +5,8 @@
   "scripts": {
     "nx": "nx",
     "start": "nx serve",
+    "start:backend": "nx serve backend",
+    "start:frontend": "nx serve money-bunny",
     "build": "nx build",
     "test": "nx run-many --all --target='test'",
     "lint": "nx workspace-lint && nx lint",
