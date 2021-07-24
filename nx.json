@@ -27,6 +27,12 @@
     ]
   },
   "projects": {
+    "backend": {
+      "tags": []
+    },
+    "models": {
+      "tags": []
+    },
     "money-bunny": {
       "tags": []
     },
