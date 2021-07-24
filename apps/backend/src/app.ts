@@ -2,6 +2,7 @@ import express from 'express';
 import { CreateExpenseDto, UpdateExpenseDto } from '@money-bunny/models';
 import {
   createExpense,
+  deleteExpense,
   getExpenses,
   updateExpense,
 } from './app/read-data.service';
@@ -21,6 +22,18 @@ app.put('/api/expenses/:id', (req, res) => {
   try {
     const updatedExpense = updateExpense(id, expense);
     res.send(updatedExpense);
+  } catch (error) {
+    if (error instanceof ItemNotFoundError) {
+      res.sendStatus(404);
+    }
+  }
+});
+
+app.delete('/api/expenses/:id', (req, res) => {
+  const id = req.params.id as string;
+  try {
+    deleteExpense(id);
+    res.sendStatus(200);
   } catch (error) {
     if (error instanceof ItemNotFoundError) {
       res.sendStatus(404);

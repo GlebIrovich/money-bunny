@@ -32,6 +32,16 @@ export function updateExpense(
   return updatedExpense;
 }
 
+export function deleteExpense(expenseId: string): void {
+  const existingExpense = expensesDB.get(expenseId);
+
+  if (!existingExpense) {
+    throw new ItemNotFoundError(expenseId);
+  }
+
+  expensesDB.delete(expenseId);
+}
+
 export function createExpense(expense: CreateExpenseDto): ExpenseDto {
   const now = new Date().toISOString();
 
