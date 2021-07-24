@@ -66,6 +66,17 @@ describe('backend tests', () => {
     });
   });
 
+  describe('DELETE route', () => {
+    it('should delete expense', (done) => {
+      request(app).delete(`/api/expenses/${expense.id}`).expect(200, done);
+    });
+
+    it('should return 404 if item is not found', (done) => {
+      expensesDB.clear();
+      request(app).delete(`/api/expenses/${expense.id}`).expect(404, done);
+    });
+  });
+
   describe('POST route', () => {
     const newExpense: CreateExpenseDto = {
       category: 'NEW Category',
