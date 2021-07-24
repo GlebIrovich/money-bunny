@@ -68,7 +68,14 @@ describe('backend tests', () => {
 
   describe('DELETE route', () => {
     it('should delete expense', (done) => {
-      request(app).delete(`/api/expenses/${expense.id}`).expect(200, done);
+      request(app)
+        .delete(`/api/expenses/${expense.id}`)
+        .expect(200)
+        .then((response) => {
+          expect(response.body).toEqual({ id: expense.id });
+          done();
+        })
+        .catch(done);
     });
 
     it('should return 404 if item is not found', (done) => {

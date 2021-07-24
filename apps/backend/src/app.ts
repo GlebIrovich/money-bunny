@@ -7,10 +7,12 @@ import {
   updateExpense,
 } from './app/read-data.service';
 import { ItemNotFoundError } from './app/item-not-found.error';
+import cors from 'cors';
 
 export const app = express();
 
 app.use(express.json());
+app.use(cors());
 
 app.get('/api/expenses', (req, res) => {
   res.send(getExpenses());
@@ -33,7 +35,7 @@ app.delete('/api/expenses/:id', (req, res) => {
   const id = req.params.id as string;
   try {
     deleteExpense(id);
-    res.sendStatus(200);
+    res.send({ id });
   } catch (error) {
     if (error instanceof ItemNotFoundError) {
       res.sendStatus(404);
