@@ -5,6 +5,10 @@ import {
   useApplicationDispatch,
   useApplicationState,
 } from './state/application-state.context';
+import AppLayoutComponent from './components/app-layout/app-layout.component';
+import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
+import ExpensesPage from './pages/expenses.page';
+import StatisticsPage from './pages/statistics.page';
 
 export function App() {
   const state = useApplicationState();
@@ -35,12 +39,21 @@ export function App() {
     });
 
   return (
-    <div>
-      <button onClick={addItem}>Click</button>
-      {state.expenses.map((item) => (
-        <div key={item.id}>{item.amount}</div>
-      ))}
-    </div>
+    <BrowserRouter>
+      <AppLayoutComponent>
+        <Switch>
+          <Route path={'/expenses'}>
+            <ExpensesPage />
+          </Route>
+          <Route path={'/statistics'}>
+            <StatisticsPage />
+          </Route>
+          <Route path={'/'}>
+            <Redirect to={'/expenses'} />
+          </Route>
+        </Switch>
+      </AppLayoutComponent>
+    </BrowserRouter>
   );
 }
 
