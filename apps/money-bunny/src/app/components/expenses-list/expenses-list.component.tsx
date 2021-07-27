@@ -2,6 +2,7 @@ import React, { FC, useMemo, useState } from 'react';
 import { Currency, ExpenseDto } from '@money-bunny/models';
 import { displayCurrencyHelper } from '../../helpers/display-currency.helper';
 import {
+  Button,
   Paper,
   Table,
   TableBody,
@@ -12,6 +13,13 @@ import {
   TableSortLabel,
 } from '@material-ui/core';
 import { sortExpensesBy } from '../../helpers/sort-expenses-by.helper';
+import ActionBarComponent from './action-bar.component';
+import styled from 'styled-components';
+import { filterExpenses } from '../../helpers/filter-expenses.helper';
+
+const StyledButton = styled(Button)`
+  margin-left: 10px !important;
+`;
 
 function formatDate(dateString: string): string {
   const date = new Date(dateString);
@@ -47,6 +55,7 @@ const ExpensesListComponent: FC<Props> = ({ expenses }) => {
   const [selectedExpenseId, setSelectedExpenseId] = useState<
     string | undefined
   >();
+  const [searchTerm, search] = useState<string>('');
 
   const handleSortingClick = (field: keyof ExpenseDto) => () => {
     const isSameSortField = field === sortField;
@@ -65,49 +74,76 @@ const ExpensesListComponent: FC<Props> = ({ expenses }) => {
   };
 
   const displayedExpenses = useMemo(() => {
+    const filteredExpenses = [...expenses].filter(filterExpenses(searchTerm));
     if (sortField && order) {
-      return [...expenses].sort(sortExpensesBy(sortField, order));
+      return filteredExpenses.sort(sortExpensesBy(sortField, order));
     }
-    return expenses;
-  }, [expenses, order, sortField]);
+    return filteredExpenses;
+  }, [expenses, order, sortField, searchTerm]);
 
   return (
-    <TableContainer component={Paper}>
-      <Table>
-        <TableHead>
-          <TableRow>
-            {headCells.map((cell) => (
-              <TableCell key={cell.id} sortDirection={'asc'}>
-                <TableSortLabel
-                  active={cell.id === sortField}
-                  direction={order}
-                  onClick={handleSortingClick(cell.id)}
-                >
-                  {cell.label}
-                </TableSortLabel>
-              </TableCell>
-            ))}
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {displayedExpenses.map((expense) => (
-            <TableRow
-              key={expense.id}
-              selected={selectedExpenseId === expense.id}
-              onClick={handleExpenseSelect(expense.id)}
+    <>
+      <ActionBarComponent searchTerm={searchTerm} onSearch={search}>
+        {selectedExpenseId ? (
+          <>
+            <StyledButton
+              size={'medium'}
+              color={'default'}
+              variant={'outlined'}
             >
-              <TableCell component="th" scope="row">
-                {expense.category}
-              </TableCell>
-              <TableCell>{expense.recipient}</TableCell>
-              <TableCell>{expense.amount}</TableCell>
-              <TableCell>{displayCurrencyHelper(expense.currency)}</TableCell>
-              <TableCell>{formatDate(expense.createdAt)}</TableCell>
+              Edit
+            </StyledButton>
+            <StyledButton
+              size={'medium'}
+              color={'secondary'}
+              variant={'outlined'}
+            >
+              Delete
+            </StyledButton>
+          </>
+        ) : (
+          <StyledButton size={'medium'} color={'primary'} variant={'outlined'}>
+            Add
+          </StyledButton>
+        )}
+      </ActionBarComponent>
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              {headCells.map((cell) => (
+                <TableCell key={cell.id} sortDirection={'asc'}>
+                  <TableSortLabel
+                    active={cell.id === sortField}
+                    direction={order}
+                    onClick={handleSortingClick(cell.id)}
+                  >
+                    {cell.label}
+                  </TableSortLabel>
+                </TableCell>
+              ))}
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+          </TableHead>
+          <TableBody>
+            {displayedExpenses.map((expense) => (
+              <TableRow
+                key={expense.id}
+                selected={selectedExpenseId === expense.id}
+                onClick={handleExpenseSelect(expense.id)}
+              >
+                <TableCell component="th" scope="row">
+                  {expense.category}
+                </TableCell>
+                <TableCell>{expense.recipient}</TableCell>
+                <TableCell>{expense.amount}</TableCell>
+                <TableCell>{displayCurrencyHelper(expense.currency)}</TableCell>
+                <TableCell>{formatDate(expense.createdAt)}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </>
   );
 };
 
