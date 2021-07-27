@@ -47,9 +47,10 @@ const headCells: HeadCell[] = [
 
 interface Props {
   expenses: ExpenseDto[];
+  onDelete: (id: string) => void;
 }
 
-const ExpensesListComponent: FC<Props> = ({ expenses }) => {
+const ExpensesListComponent: FC<Props> = ({ expenses, onDelete }) => {
   const [sortField, setSortField] = useState<keyof ExpenseDto | undefined>();
   const [order, setOrder] = useState<'asc' | 'desc' | undefined>();
   const [selectedExpenseId, setSelectedExpenseId] = useState<
@@ -71,6 +72,13 @@ const ExpensesListComponent: FC<Props> = ({ expenses }) => {
     setSelectedExpenseId(
       expenseId === selectedExpenseId ? undefined : expenseId
     );
+  };
+
+  const handleDelete = () => {
+    if (selectedExpenseId) {
+      onDelete(selectedExpenseId);
+      setSelectedExpenseId(undefined);
+    }
   };
 
   const displayedExpenses = useMemo(() => {
@@ -97,6 +105,7 @@ const ExpensesListComponent: FC<Props> = ({ expenses }) => {
               size={'medium'}
               color={'secondary'}
               variant={'outlined'}
+              onClick={handleDelete}
             >
               Delete
             </StyledButton>

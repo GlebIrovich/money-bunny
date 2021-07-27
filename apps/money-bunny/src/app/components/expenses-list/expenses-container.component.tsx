@@ -4,20 +4,19 @@ import {
   useApplicationDispatch,
   useApplicationState,
 } from '../../state/application-state.context';
-import { ExpenseDto } from '@money-bunny/models';
 import { expensesApiService } from '../../services/expenses-api.service';
 
 const ExpensesContainerComponent = () => {
   const { expenses } = useApplicationState();
   const dispatch = useApplicationDispatch();
 
-  const onExpenseChange = useCallback(
-    (expenseId: string, expense: Partial<ExpenseDto>) => {
-      expensesApiService.update(expenseId, expense).then((results) => {
+  const deleteExpense = useCallback(
+    (expenseId: string) => {
+      expensesApiService.delete(expenseId).then((results) => {
         if (results.data) {
           dispatch({
-            type: 'UPDATE_EXPENSE',
-            expense: results.data,
+            type: 'REMOVE_EXPENSE',
+            expenseId,
           });
         }
       });
@@ -25,7 +24,7 @@ const ExpensesContainerComponent = () => {
     [dispatch]
   );
 
-  return <ExpensesListComponent expenses={expenses} />;
+  return <ExpensesListComponent onDelete={deleteExpense} expenses={expenses} />;
 };
 
 export default ExpensesContainerComponent;
