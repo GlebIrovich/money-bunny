@@ -47,6 +47,9 @@ export const expensesApiService = {
 
   create: (item: CreateExpenseDto): Promise<ApiServiceResponse<ExpenseDto>> =>
     fetch(endpointUrl(), {
+      headers: {
+        'Content-Type': 'application/json',
+      },
       method: 'POST',
       body: JSON.stringify(item),
     }).then((response) => parseResponseData<ExpenseDto>(response)),
@@ -55,7 +58,10 @@ export const expensesApiService = {
     id: string,
     item: UpdateExpenseDto
   ): Promise<ApiServiceResponse<ExpenseDto>> =>
-    fetch(`${endpointUrl()}/${id}`, {
+    fetch(`${endpointUrl()}/1/${id}`, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
       method: 'PUT',
       body: JSON.stringify(item),
     }).then((response) => parseResponseData<ExpenseDto>(response)),
