@@ -48,14 +48,23 @@ const headCells: HeadCell[] = [
 interface Props {
   expenses: ExpenseDto[];
   onDelete: (id: string) => void;
+  onEdit: () => void;
+  onAdd: () => void;
+
+  selectedExpenseId: string | undefined;
+  setSelectedExpenseId: (id: string | undefined) => void;
 }
 
-const ExpensesListComponent: FC<Props> = ({ expenses, onDelete }) => {
+const ExpensesListComponent: FC<Props> = ({
+  expenses,
+  onDelete,
+  onEdit,
+  onAdd,
+  setSelectedExpenseId,
+  selectedExpenseId,
+}) => {
   const [sortField, setSortField] = useState<keyof ExpenseDto | undefined>();
   const [order, setOrder] = useState<'asc' | 'desc' | undefined>();
-  const [selectedExpenseId, setSelectedExpenseId] = useState<
-    string | undefined
-  >();
   const [searchTerm, search] = useState<string>('');
 
   const handleSortingClick = (field: keyof ExpenseDto) => () => {
@@ -98,6 +107,7 @@ const ExpensesListComponent: FC<Props> = ({ expenses, onDelete }) => {
               size={'medium'}
               color={'default'}
               variant={'outlined'}
+              onClick={onEdit}
             >
               Edit
             </StyledButton>
@@ -111,7 +121,12 @@ const ExpensesListComponent: FC<Props> = ({ expenses, onDelete }) => {
             </StyledButton>
           </>
         ) : (
-          <StyledButton size={'medium'} color={'primary'} variant={'outlined'}>
+          <StyledButton
+            size={'medium'}
+            color={'primary'}
+            variant={'outlined'}
+            onClick={onAdd}
+          >
             Add
           </StyledButton>
         )}
