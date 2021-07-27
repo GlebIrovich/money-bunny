@@ -9,7 +9,7 @@ const Container = styled.div`
 const PageTitleLayoutComponent: FC = ({ children }) => {
   return (
     <Container>
-      <Typography variant={'h3'}>{children}</Typography>;
+      <Typography variant={'h3'}>{children}</Typography>
     </Container>
   );
 };
