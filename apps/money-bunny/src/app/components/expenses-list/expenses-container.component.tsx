@@ -5,12 +5,8 @@ import {
   useApplicationState,
 } from '../../state/application-state.context';
 import { expensesApiService } from '../../services/expenses-api.service';
-import DialogComponent from './dialog.component';
-import {
-  CreateExpenseDto,
-  ExpenseDto,
-  UpdateExpenseDto,
-} from '@money-bunny/models';
+import DialogComponent, { ExpenseFormState } from './dialog.component';
+import { CreateExpenseDto, UpdateExpenseDto } from '@money-bunny/models';
 import { Typography } from '@material-ui/core';
 import styled from 'styled-components';
 
@@ -46,10 +42,10 @@ const ExpensesContainerComponent = () => {
     [dispatch]
   );
 
-  const save = (expense: Partial<ExpenseDto>) => {
+  const save = (expense: ExpenseFormState) => {
     return selectedExpenseId
       ? updateExpense(selectedExpenseId, expense)
-      : createExpense(expense as CreateExpenseDto);
+      : createExpense(expense);
   };
 
   const createExpense = useCallback(

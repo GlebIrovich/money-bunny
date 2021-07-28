@@ -7,7 +7,7 @@ import {
   Select,
   TextField,
 } from '@material-ui/core';
-import { CreateExpenseDto, Currency, ExpenseDto } from '@money-bunny/models';
+import { Currency, ExpenseDto } from '@money-bunny/models';
 import styled from 'styled-components';
 import { displayCurrencyHelper } from '../../helpers/display-currency.helper';
 
@@ -15,27 +15,50 @@ const Container = styled.div`
   width: 350px;
 `;
 
+const InputContainer = styled.div`
+  padding: 10px 20px;
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  padding: 20px;
+  button {
+    margin-left: 10px;
+  }
+`;
+
+export interface ExpenseFormState {
+  currency: Currency;
+  recipient?: string;
+  amount: number;
+  category: string;
+  createdAt: string;
+}
+
 interface Props {
   isOpen: boolean;
   close: () => void;
   expense?: ExpenseDto;
-  onSave: (expense: Partial<ExpenseDto>) => void;
+  onSave: (expense: ExpenseFormState) => void;
 }
 
-const initialState: CreateExpenseDto = {
+const initialState: ExpenseFormState = {
   currency: Currency.CHF,
   recipient: '',
   amount: 0,
   category: '',
+  createdAt: new Date().toISOString(),
 };
 
 const DialogComponent: FC<Props> = ({ isOpen, close, expense, onSave }) => {
-  const [formState, setFormState] = useState<Partial<ExpenseDto>>(initialState);
+  const [formState, setFormState] = useState<ExpenseFormState>(initialState);
 
   useEffect(() => expense && setFormState(expense), [expense, setFormState]);
 
   const handleInput =
-    (key: keyof ExpenseDto) => (event: React.ChangeEvent<HTMLInputElement>) =>
+    (key: keyof ExpenseFormState) =>
+    (event: React.ChangeEvent<HTMLInputElement>) =>
       setFormState((state) => ({ ...state, [key]: event.target.value }));
   const handleSave = () => onSave(formState);
 
@@ -45,57 +68,72 @@ const DialogComponent: FC<Props> = ({ isOpen, close, expense, onSave }) => {
     <Dialog onClose={close} aria-labelledby="simple-dialog-title" open={isOpen}>
       <DialogTitle id="simple-dialog-title">{title}</DialogTitle>
       <Container>
-        <TextField
-          required
-          size={'small'}
-          variant="outlined"
-          type={'number'}
-          placeholder={'Amount'}
-          value={formState.amount}
-          onChange={handleInput('amount')}
-        />
+        <InputContainer>
+          <TextField
+            required
+            size={'small'}
+            variant="outlined"
+            type={'number'}
+            placeholder={'Amount'}
+            value={formState.amount}
+            onChange={handleInput('amount')}
+          />
+        </InputContainer>
 
-        <Select value={Currency.CHF} disabled>
-          <MenuItem value={Currency.CHF}>
-            {displayCurrencyHelper(Currency.CHF)}
-          </MenuItem>
-        </Select>
+        <InputContainer>
+          <Select value={Currency.CHF} disabled>
+            <MenuItem value={Currency.CHF}>
+              {displayCurrencyHelper(Currency.CHF)}
+            </MenuItem>
+          </Select>
+        </InputContainer>
 
-        <TextField
-          required
-          size={'small'}
-          variant="outlined"
-          placeholder={'Category'}
-          value={formState.category}
-          onChange={handleInput('category')}
-        />
-        <TextField
-          size={'small'}
-          variant="outlined"
-          placeholder={'Recipient'}
-          value={formState.recipient}
-          onChange={handleInput('recipient')}
-        />
+        <InputContainer>
+          <TextField
+            required
+            size={'small'}
+            variant="outlined"
+            placeholder={'Category'}
+            value={formState.category}
+            onChange={handleInput('category')}
+          />
+        </InputContainer>
+        <InputContainer>
+          <TextField
+            size={'small'}
+            variant="outlined"
+            placeholder={'Recipient'}
+            value={formState.recipient}
+            onChange={handleInput('recipient')}
+          />
+        </InputContainer>
 
-        <Button
-          size={'medium'}
-          color={'default'}
-          variant={'outlined'}
-          onClick={close}
-        >
-          Cancel
-        </Button>
-        <Button
-          size={'medium'}
-          color={'primary'}
-          variant={'outlined'}
-          onClick={handleSave}
-        >
-          Save
-        </Button>
+        <ButtonContainer>
+          <Button
+            size={'medium'}
+            color={'default'}
+            variant={'outlined'}
+            onClick={close}
+          >
+            Cancel
+          </Button>
+          <Button
+            disabled={!isValid(formState)}
+            size={'medium'}
+            color={'primary'}
+            variant={'outlined'}
+            onClick={handleSave}
+          >
+            Save
+          </Button>
+        </ButtonContainer>
       </Container>
     </Dialog>
   );
 };
 
 export default DialogComponent;
+
+function isValid(formState: ExpenseFormState): boolean {
+  return !!formState.category;
+}

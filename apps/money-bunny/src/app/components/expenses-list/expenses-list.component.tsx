@@ -3,6 +3,7 @@ import { Currency, ExpenseDto } from '@money-bunny/models';
 import { displayCurrencyHelper } from '../../helpers/display-currency.helper';
 import {
   Button,
+  ClickAwayListener,
   Paper,
   Table,
   TableBody,
@@ -131,42 +132,46 @@ const ExpensesListComponent: FC<Props> = ({
           </StyledButton>
         )}
       </ActionBarComponent>
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              {headCells.map((cell) => (
-                <TableCell key={cell.id} sortDirection={'asc'}>
-                  <TableSortLabel
-                    active={cell.id === sortField}
-                    direction={order}
-                    onClick={handleSortingClick(cell.id)}
-                  >
-                    {cell.label}
-                  </TableSortLabel>
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {displayedExpenses.map((expense) => (
-              <TableRow
-                key={expense.id}
-                selected={selectedExpenseId === expense.id}
-                onClick={handleExpenseSelect(expense.id)}
-              >
-                <TableCell component="th" scope="row">
-                  {expense.category}
-                </TableCell>
-                <TableCell>{expense.recipient}</TableCell>
-                <TableCell>{expense.amount}</TableCell>
-                <TableCell>{displayCurrencyHelper(expense.currency)}</TableCell>
-                <TableCell>{formatDate(expense.createdAt)}</TableCell>
+      <ClickAwayListener onClickAway={() => setSelectedExpenseId(undefined)}>
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                {headCells.map((cell) => (
+                  <TableCell key={cell.id} sortDirection={'asc'}>
+                    <TableSortLabel
+                      active={cell.id === sortField}
+                      direction={order}
+                      onClick={handleSortingClick(cell.id)}
+                    >
+                      {cell.label}
+                    </TableSortLabel>
+                  </TableCell>
+                ))}
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableHead>
+            <TableBody>
+              {displayedExpenses.map((expense) => (
+                <TableRow
+                  key={expense.id}
+                  selected={selectedExpenseId === expense.id}
+                  onClick={handleExpenseSelect(expense.id)}
+                >
+                  <TableCell component="th" scope="row">
+                    {expense.category}
+                  </TableCell>
+                  <TableCell>{expense.recipient}</TableCell>
+                  <TableCell>{expense.amount}</TableCell>
+                  <TableCell>
+                    {displayCurrencyHelper(expense.currency)}
+                  </TableCell>
+                  <TableCell>{formatDate(expense.createdAt)}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </ClickAwayListener>
     </>
   );
 };
