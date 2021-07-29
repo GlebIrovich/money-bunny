@@ -1,82 +1,63 @@
 # MoneyBunny
 
-This project was generated using [Nx](https://nx.dev).
+## Requirements
 
-<p style="text-align: center;"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="450"></p>
+Node v14.16.1
+npm v6.14.12
 
-🔎 **Smart, Extensible Build Framework**
+## Project structure
 
-## Adding capabilities to your workspace
+1. /apps/money-bunny - React application
+2. /apps/backend - mock express.js server
+3. /libs/models - Typescript types shared between applications
 
-Nx supports many plugins which add capabilities for developing different types of applications and different tools.
+## Quick start
 
-These capabilities include generating applications, libraries, etc as well as the devtools to test, and build projects as well.
+1. Install dependencies with `npm install`
+2. Start backend application `npm run start:backend`
+3. Start frontend application `npm run start:frontend`. Application will be available on `http://localhost:4200/`
 
-Below are our core plugins:
+## Tests
 
-- [React](https://reactjs.org)
-  - `npm install --save-dev @nrwl/react`
-- Web (no framework frontends)
-  - `npm install --save-dev @nrwl/web`
-- [Angular](https://angular.io)
-  - `npm install --save-dev @nrwl/angular`
-- [Nest](https://nestjs.com)
-  - `npm install --save-dev @nrwl/nest`
-- [Express](https://expressjs.com)
-  - `npm install --save-dev @nrwl/express`
-- [Node](https://nodejs.org)
-  - `npm install --save-dev @nrwl/node`
+To execute unit and component tests run `npm test`
 
-There are also many [community plugins](https://nx.dev/community) you could add.
+## Project requirements
 
-## Generate an application
+**Disclaimer**
 
-Run `nx g @nrwl/react:app my-app` to generate an application.
+> The majority of technical decisions are made in favour of custom implementation to allow more interesting project discussion.
+> If it was an app for production, I would propose using well-supported community solutions.
 
-> You can use any of the plugins above to generate applications as well.
+- You can use any starter project, or boilerplate for react or next.js, e.g.
 
-When using Nx, you can create multiple applications and libraries in the same workspace.
+I used **nx** framework as it allows simple code scaffolding and encourages code re-usability via monorepo approach
 
-## Generate a library
+- Implement a state management concept, using pure react or libraries as redux-rtk, zustand etc.
 
-Run `nx g @nrwl/react:lib my-lib` to generate a library.
+Any state management library would be an overkill for such a simple application. Therefore, I decided to go with a pure react solution.
+Although, for this kind of app simple component state would be sufficient, I deliberately decided to go with react context.
+Firstly, state reducer pattern is very similar to redux implementation.
+Secondly, I could avoid introducing additional dependencies
 
-> You can also use any of the plugins above to generate libraries as well.
+- Use http requests to consume the REST API from the client
 
-Libraries are shareable across libraries and applications. They can be imported from `@money-bunny/mylib`.
+Application uses fetch api. I initially considered using `react-query`, however it is "too good".
+It already provides great error handling and hook based API, therefore I proceeded with custom implementation
 
-## Development server
+- Create a simple mock server for loading and modifying the data, e.g. json-server or next.js api routes
 
-Run `nx serve my-app` for a dev server. Navigate to http://localhost:4200/. The app will automatically reload if you change any of the source files.
+I used very basic express.js server implementation and store expenses in memory.
 
-## Code scaffolding
+- UI styling will be appreciated but is not required, feel free to use any 3rd party library you prefer
 
-Run `nx g @nrwl/react:component my-component --project=my-app` to generate a new component.
+To accomplish the task I used Material-UI component lib.
 
-## Build
+## Next steps
 
-Run `nx build my-app` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+Given the narrow scope of the task, I did not have a chance to implement all functionality, that I find important,
+therefore I am providing a list of ideas below:
 
-## Running unit tests
-
-Run `nx test my-app` to execute the unit tests via [Jest](https://jestjs.io).
-
-Run `nx affected:test` to execute the unit tests affected by a change.
-
-## Running end-to-end tests
-
-Run `ng e2e my-app` to execute the end-to-end tests via [Cypress](https://www.cypress.io).
-
-Run `nx affected:e2e` to execute the end-to-end tests affected by a change.
-
-## Understand your workspace
-
-Run `nx dep-graph` to see a diagram of the dependencies of your projects.
-
-## Further help
-
-Visit the [Nx Documentation](https://nx.dev) to learn more.
-
-## Ideas For Improvements
-
-- CRUD for categories
+- Multi-currency support (requires integration with 3d-party API to retrieve exchange rates)
+- Provide expenses data insights (timeline of expenses for a particular period / consolidation by category)
+- Improve update / create form (add typeahead search to suggest already existing categories)
+- Improve notification handling UX (show info / error / success snackbar depending on the API request state, show loading indication)
