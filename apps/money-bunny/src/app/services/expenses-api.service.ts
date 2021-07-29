@@ -47,6 +47,9 @@ export const expensesApiService = {
 
   create: (item: CreateExpenseDto): Promise<ApiServiceResponse<ExpenseDto>> =>
     fetch(endpointUrl(), {
+      headers: {
+        'Content-Type': 'application/json',
+      },
       method: 'POST',
       body: JSON.stringify(item),
     }).then((response) => parseResponseData<ExpenseDto>(response)),
@@ -56,6 +59,9 @@ export const expensesApiService = {
     item: UpdateExpenseDto
   ): Promise<ApiServiceResponse<ExpenseDto>> =>
     fetch(`${endpointUrl()}/${id}`, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
       method: 'PUT',
       body: JSON.stringify(item),
     }).then((response) => parseResponseData<ExpenseDto>(response)),

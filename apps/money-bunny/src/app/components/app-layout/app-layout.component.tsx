@@ -15,9 +15,19 @@ import styled from 'styled-components';
 import { ActivePage, useActivePage } from '../../hooks/use-active-page.hook';
 import { useHistory } from 'react-router-dom';
 
+const DRAWER_WIDTH_PX = 250;
+
+const AppShell = styled.div`
+  height: 100vh;
+`;
+
 const DrawerContent = styled.div`
   padding-top: 64px;
-  width: 250px;
+  width: ${DRAWER_WIDTH_PX}px;
+`;
+
+const ContentContainer = styled.main`
+  margin-right: ${DRAWER_WIDTH_PX}px;
 `;
 
 const AppLayoutComponent: FC = ({ children }) => {
@@ -27,7 +37,7 @@ const AppLayoutComponent: FC = ({ children }) => {
   const navigateTo = (page: ActivePage) => () => history.push(`/${page}`);
 
   return (
-    <div>
+    <AppShell>
       <CssBaseline />
       <AppBar position={'relative'}>
         <Toolbar>
@@ -62,8 +72,8 @@ const AppLayoutComponent: FC = ({ children }) => {
           </List>
         </DrawerContent>
       </Drawer>
-      <main>{children}</main>
-    </div>
+      <ContentContainer>{children}</ContentContainer>
+    </AppShell>
   );
 };
 
