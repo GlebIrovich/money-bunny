@@ -33,7 +33,6 @@ export interface ExpenseFormState {
   recipient?: string;
   amount: number;
   category: string;
-  createdAt: string;
 }
 
 interface Props {
@@ -48,7 +47,6 @@ const initialState: ExpenseFormState = {
   recipient: '',
   amount: 0,
   category: '',
-  createdAt: new Date().toISOString(),
 };
 
 const DialogComponent: FC<Props> = ({ isOpen, close, expense, onSave }) => {

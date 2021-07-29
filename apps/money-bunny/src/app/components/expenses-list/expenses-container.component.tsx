@@ -99,7 +99,7 @@ const ExpensesContainerComponent = () => {
       />
       {expenses.length === 0 && (
         <EmptyState>
-          <Typography variant={'h6'}>You don't have any expenses </Typography>
+          <Typography variant={'h6'}>You don't have any expenses</Typography>
         </EmptyState>
       )}
       <DialogComponent

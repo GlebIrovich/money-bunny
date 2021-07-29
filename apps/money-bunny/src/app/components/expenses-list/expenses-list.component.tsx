@@ -100,39 +100,40 @@ const ExpensesListComponent: FC<Props> = ({
   }, [expenses, order, sortField, searchTerm]);
 
   return (
-    <>
-      <ActionBarComponent searchTerm={searchTerm} onSearch={search}>
-        {selectedExpenseId ? (
-          <>
+    <ClickAwayListener onClickAway={() => setSelectedExpenseId(undefined)}>
+      <div>
+        <ActionBarComponent searchTerm={searchTerm} onSearch={search}>
+          {selectedExpenseId ? (
+            <>
+              <StyledButton
+                size={'medium'}
+                color={'default'}
+                variant={'outlined'}
+                onClick={onEdit}
+              >
+                Edit
+              </StyledButton>
+              <StyledButton
+                size={'medium'}
+                color={'secondary'}
+                variant={'outlined'}
+                onClick={handleDelete}
+              >
+                Delete
+              </StyledButton>
+            </>
+          ) : (
             <StyledButton
               size={'medium'}
-              color={'default'}
+              color={'primary'}
               variant={'outlined'}
-              onClick={onEdit}
+              onClick={onAdd}
             >
-              Edit
+              Add
             </StyledButton>
-            <StyledButton
-              size={'medium'}
-              color={'secondary'}
-              variant={'outlined'}
-              onClick={handleDelete}
-            >
-              Delete
-            </StyledButton>
-          </>
-        ) : (
-          <StyledButton
-            size={'medium'}
-            color={'primary'}
-            variant={'outlined'}
-            onClick={onAdd}
-          >
-            Add
-          </StyledButton>
-        )}
-      </ActionBarComponent>
-      <ClickAwayListener onClickAway={() => setSelectedExpenseId(undefined)}>
+          )}
+        </ActionBarComponent>
+
         <TableContainer component={Paper}>
           <Table>
             <TableHead>
@@ -171,8 +172,8 @@ const ExpensesListComponent: FC<Props> = ({
             </TableBody>
           </Table>
         </TableContainer>
-      </ClickAwayListener>
-    </>
+      </div>
+    </ClickAwayListener>
   );
 };
 
