@@ -21,12 +21,30 @@ npm v6.14.12
 
 To execute unit and component tests run `npm test`
 
+## Application User
+
+I strongly believe that any technical solution must be fulfilling a business case, therefore I came up with some assumptions about the final user.
+And used them to come up with an MVP.
+
+Money-Bunny user:
+
+- uses application to keep track of family budget
+- prefers using desktop application
+- wants to analyze expenses over time to optimize her spending
+
+MVP features:
+
+- CRUD operations for the expenses
+- Overview of the expenses in the tabular format
+- Sorting of expenses
+- Multi-field filtering
+
 ## Project requirements
 
 **Disclaimer**
 
 > The majority of technical decisions are made in favour of custom implementation to allow more interesting project discussion.
-> If it was an app for production, I would propose using well-supported community solutions.
+> If it was a production app, I would propose using well-supported community solutions.
 
 - You can use any starter project, or boilerplate for react or next.js, e.g.
 
